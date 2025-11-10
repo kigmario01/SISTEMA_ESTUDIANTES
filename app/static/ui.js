@@ -247,10 +247,26 @@
       .btn-modern.is-loading,
       .btn.is-loading {
         position: relative;
-        color: transparent !important;
         pointer-events: none;
       }
-      
+
+      .btn-modern.is-loading {
+        padding-right: calc(var(--space-4) + 1.75rem);
+      }
+
+      .btn-modern.btn-sm.is-loading {
+        padding-right: calc(var(--space-3) + 1.5rem);
+      }
+
+      .btn-modern.btn-lg.is-loading {
+        padding-right: calc(var(--space-6) + 1.75rem);
+      }
+
+      .btn.is-loading {
+        padding-right: 2.5rem;
+        opacity: 0.9;
+      }
+
       .btn-modern.is-loading::after,
       .btn.is-loading::after {
         content: '';
@@ -258,26 +274,14 @@
         width: 1rem;
         height: 1rem;
         top: 50%;
-        left: 50%;
-        margin-left: -0.5rem;
+        right: 0.75rem;
         margin-top: -0.5rem;
-        border: 2px solid #ffffff;
+        border: 2px solid currentColor;
         border-radius: 50%;
         border-top-color: transparent;
         animation: spin 0.8s linear infinite;
       }
-      
-      .btn-secondary.is-loading::after,
-      .btn-outline.is-loading::after,
-      .btn-ghost.is-loading::after {
-        border-color: var(--neutral-700);
-        border-top-color: transparent;
-      }
-      
-      @keyframes spin {
-        to { transform: rotate(360deg); }
-      }
-      
+
       .page-transitioning {
         opacity: 0.8;
         transition: opacity 0.3s ease-out;
