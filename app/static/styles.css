@@ -463,6 +463,8 @@ th { background: var(--surface-2); text-align: left; }
   
   --secondary-50: #f8fafc;
   --secondary-100: #f1f5f9;
+  --secondary-200: #e2e8f0;
+  --secondary-300: #cbd5e1;
   --secondary-500: #64748b;
   --secondary-600: #475569;
   --secondary-700: #334155;
@@ -718,13 +720,13 @@ body {
 
 .btn-outline {
   background-color: transparent;
-  color: var(--neutral-700);
-  border-color: var(--neutral-300);
+  color: var(--neutral-900);
+  border-color: var(--neutral-400);
 }
 
 .btn-outline:hover:not(:disabled) {
-  background-color: var(--neutral-50);
-  border-color: var(--neutral-400);
+  background-color: var(--neutral-100);
+  border-color: var(--neutral-500);
   transform: translateY(-1px);
 }
 
@@ -749,6 +751,13 @@ body {
   padding: var(--space-3) var(--space-6);
   font-size: var(--text-base);
   min-height: 3rem;
+}
+
+/* Fallback seguro: si falta variante, usa contraste alto */
+.btn-modern:not(.btn-primary):not(.btn-secondary):not(.btn-outline):not(.btn-ghost) {
+  background-color: var(--neutral-100);
+  color: var(--neutral-900);
+  border-color: var(--neutral-300);
 }
 
 /* Ripple effect */
@@ -1152,6 +1161,35 @@ body {
   body {
     background-color: var(--neutral-0);
     color: var(--neutral-200);
+  }
+  /* Navbar en modo oscuro: fondo y enlaces con buen contraste */
+  .navbar-modern {
+    background-color: rgba(15, 23, 42, 0.95); /* slate-900 con transparencia */
+    border-bottom: 1px solid var(--neutral-200);
+    box-shadow: var(--shadow-sm);
+  }
+
+  .navbar-brand {
+    color: var(--primary-400);
+  }
+  .navbar-brand:hover {
+    color: var(--primary-300);
+  }
+
+  .navbar-nav .nav-link {
+    color: var(--neutral-300);
+    background-color: transparent;
+  }
+  .navbar-nav .nav-link:hover {
+    color: var(--neutral-100);
+    background-color: var(--neutral-50);
+  }
+  .navbar-nav .nav-link.active {
+    color: var(--primary-400);
+    background-color: var(--neutral-50);
+  }
+  .navbar-nav .nav-link.active::before {
+    background-color: var(--primary-500);
   }
   
   .card {
