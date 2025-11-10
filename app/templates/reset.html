@@ -1,9 +1,24 @@
 {% extends "base.html" %}
+{% block title %}Restablecer contraseña - Sistema Escolar{% endblock %}
 {% block content %}
-  <h2>Restablecer contraseña</h2>
-  <form method="post" class="form">
-    <label for="password">Nueva contraseña</label>
-    <input id="password" type="password" name="password" minlength="6" required />
-    <button type="submit" class="btn btn-primary" data-auto-loading="true">Actualizar</button>
-  </form>
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-6 animate-slide-up">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Restablecer contraseña</h1>
+        <p class="text-gray-600">Ingresa tu nueva contraseña segura.</p>
+      </div>
+      <div class="card p-8">
+        <form method="post" class="space-y-5">
+          <div class="form-group">
+            <label for="password" class="form-label">Nueva contraseña</label>
+            <input id="password" type="password" name="password" minlength="6" class="form-input" required />
+          </div>
+          <button type="submit" class="btn-modern btn-primary w-full" data-auto-loading="true">Actualizar contraseña</button>
+        </form>
+        <p class="text-center text-sm text-gray-600 mt-4">
+          ¿Recordaste tus datos? <a href="{{ url_for('auth.login') }}" class="text-blue-600">Inicia sesión</a>.
+        </p>
+      </div>
+    </div>
+  </div>
 {% endblock %}

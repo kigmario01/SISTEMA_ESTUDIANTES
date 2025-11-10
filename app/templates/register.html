@@ -1,31 +1,45 @@
 {% extends "base.html" %}
+{% block title %}Crear cuenta - Sistema Escolar{% endblock %}
 {% block content %}
-  <div class="page-narrow">
-    <div class="card">
-      <h2>Registro</h2>
-      <form method="post" class="form">
-        <label for="username">Usuario</label>
-        <input id="username" type="text" name="username" required />
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-lg w-full space-y-6 animate-slide-up">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Crear cuenta</h1>
+        <p class="text-gray-600">Regístrate para acceder al sistema escolar.</p>
+      </div>
 
-        <label for="password">Contraseña</label>
-        <input id="password" type="password" name="password" minlength="6" required />
-
-        <label for="full_name">Nombre completo</label>
-        <input id="full_name" type="text" name="full_name" />
-
-        <label for="email">Email</label>
-        <input id="email" type="email" name="email" />
-
-        <label for="role">Rol</label>
-        <select id="role" name="role" required>
-          <option value="estudiante">Estudiante</option>
-          <option value="docente">Docente</option>
-          <option value="admin">Admin</option>
-        </select>
-
-        <button type="submit" class="btn btn-primary">Registrarse</button>
-      </form>
-      <p>¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}">Inicia sesión</a>.</p>
+      <div class="card p-8">
+        <form method="post" class="grid gap-4">
+          <div class="form-group">
+            <label for="username" class="form-label">Usuario</label>
+            <input id="username" type="text" name="username" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label for="password" class="form-label">Contraseña</label>
+            <input id="password" type="password" name="password" minlength="6" class="form-input" required />
+          </div>
+          <div class="form-group">
+            <label for="full_name" class="form-label">Nombre completo</label>
+            <input id="full_name" type="text" name="full_name" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="email" class="form-label">Correo electrónico</label>
+            <input id="email" type="email" name="email" class="form-input" />
+          </div>
+          <div class="form-group">
+            <label for="role" class="form-label">Rol</label>
+            <select id="role" name="role" class="form-input" required>
+              <option value="estudiante">Estudiante</option>
+              <option value="docente">Docente</option>
+              <option value="admin">Administrador</option>
+            </select>
+          </div>
+          <button type="submit" class="btn-modern btn-primary w-full" data-auto-loading="true">Registrarse</button>
+        </form>
+        <p class="text-center text-sm text-gray-600 mt-4">
+          ¿Ya tienes cuenta? <a href="{{ url_for('auth.login') }}" class="text-blue-600">Inicia sesión</a>.
+        </p>
+      </div>
     </div>
   </div>
 {% endblock %}
