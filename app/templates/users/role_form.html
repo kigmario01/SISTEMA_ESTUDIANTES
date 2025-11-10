@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Cambiar rol de {{ user.username }}</h2>
+  <form method="post" class="form">
+    <label for="role">Rol</label>
+    <select id="role" name="role" required>
+      <option value="estudiante" {% if user.role == 'estudiante' %}selected{% endif %}>Estudiante</option>
+      <option value="docente" {% if user.role == 'docente' %}selected{% endif %}>Docente</option>
+      <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
+    </select>
+    <button type="submit" class="btn btn-primary" data-auto-loading="true">Guardar</button>
+  </form>
+{% endblock %}

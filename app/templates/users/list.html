@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Gestión de usuarios</h2>
+  <form method="get" class="filters">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por usuario" />
+    <button type="submit" class="btn btn-outline" data-auto-loading="true">Buscar</button>
+  </form>
+  <table>
+    <thead>
+      <tr><th>Usuario</th><th>Rol</th><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {% for u in users %}
+        {% set p = profiles.get(u.id) %}
+        <tr>
+          <td>{{ u.username }}</td>
+          <td>{{ u.role }}</td>
+          <td>{{ p.full_name if p else '—' }}</td>
+          <td>{{ p.email if p else '—' }}</td>
+          <td>
+            <a href="{{ url_for('users.edit_role', user_id=u.id) }}">Cambiar rol</a>
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

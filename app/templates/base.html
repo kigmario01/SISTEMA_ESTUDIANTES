@@ -1,0 +1,93 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>{% block title %}Sistema Escolar{% endblock %}</title>
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body class="animate-fade-in">
+  <!-- Modern Navigation -->
+  <nav class="navbar-modern">
+    <div class="container">
+      <a href="{{ url_for('index') }}" class="navbar-brand">
+        <svg width="32" height="32" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <rect width="32" height="32" rx="8" fill="url(#paint0_linear_1_1)"/>
+          <path d="M8 12L16 8L24 12V20L16 24L8 20V12Z" fill="white" fill-opacity="0.9"/>
+          <path d="M12 14L16 12V20L12 18V14Z" fill="white" fill-opacity="0.7"/>
+          <defs>
+            <linearGradient id="paint0_linear_1_1" x1="0" y1="0" x2="32" y2="32" gradientUnits="userSpaceOnUse">
+              <stop stop-color="#0ea5e9"/>
+              <stop offset="1" stop-color="#0369a1"/>
+            </linearGradient>
+          </defs>
+        </svg>
+        Sistema Escolar
+      </a>
+      
+      {% if current_user.is_authenticated %}
+      <ul class="navbar-nav">
+        <li><a href="{{ url_for('students.list_students') }}" class="nav-link {% if request.endpoint == 'students.list_students' %}active{% endif %}">Estudiantes</a></li>
+        <li><a href="{{ url_for('courses.list_courses') }}" class="nav-link {% if request.endpoint == 'courses.list_courses' %}active{% endif %}">Cursos</a></li>
+        <li><a href="{{ url_for('teachers.list_teachers') }}" class="nav-link {% if request.endpoint == 'teachers.list_teachers' %}active{% endif %}">Profesores</a></li>
+        <li><a href="{{ url_for('grades.list_grades') }}" class="nav-link {% if request.endpoint == 'grades.list_grades' %}active{% endif %}">Calificaciones</a></li>
+        <li><a href="{{ url_for('reports.reports_home') }}" class="nav-link {% if request.endpoint == 'reports.reports_home' %}active{% endif %}">Reportes</a></li>
+        {% if current_user.role == 'admin' %}
+        <li><a href="{{ url_for('users.manage_users') }}" class="nav-link {% if request.endpoint == 'users.manage_users' %}active{% endif %}">Usuarios</a></li>
+        {% endif %}
+      </ul>
+      
+      <div class="navbar-user">
+        <div class="user-avatar">
+          {{ (current_user.profile.full_name or current_user.username)[0]|upper }}
+        </div>
+        <div class="user-info">
+          <div class="text-sm font-medium">{{ current_user.profile.full_name or current_user.username }}</div>
+          <div class="text-xs text-gray-500">{{ current_user.role }}</div>
+        </div>
+        <a href="{{ url_for('auth.logout') }}" class="btn-modern btn-ghost btn-sm">Salir</a>
+      </div>
+      {% else %}
+      <div class="navbar-user">
+        <a href="{{ url_for('auth.login') }}" class="btn-modern btn-primary btn-sm">Ingresar</a>
+        <a href="{{ url_for('auth.register') }}" class="btn-modern btn-outline btn-sm">Registro</a>
+      </div>
+      {% endif %}
+    </div>
+  </nav>
+  
+  <!-- Flash Messages -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="container py-4">
+        {% for category, message in messages %}
+          <div class="alert alert-{{ category }}" data-auto-dismiss="true">
+            <div class="flex items-center">
+              <svg class="w-5 h-5 mr-3 flex-shrink-0" fill="currentColor" viewBox="0 0 20 20">
+                {% if category == 'success' %}
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+                {% elif category == 'error' %}
+                  <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd"/>
+                {% else %}
+                  <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"/>
+                {% endif %}
+              </svg>
+              <span>{{ message }}</span>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+  
+  <!-- Main Content -->
+  <main class="container py-6">
+    {% block content %}{% endblock %}
+  </main>
+  
+  <script src="{{ url_for('static', filename='ui.js') }}"></script>
+</body>
+</html>

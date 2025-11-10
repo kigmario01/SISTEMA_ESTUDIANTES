@@ -1,0 +1,11 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ 'Crear' if action == 'create' else 'Editar' }} profesor</h2>
+  <form method="post">
+    <label>Nombre</label>
+    <input type="text" name="name" value="{{ teacher.name if teacher else '' }}" required />
+    <label>Email</label>
+    <input type="email" name="email" value="{{ teacher.email if teacher else '' }}" required />
+    <button type="submit" class="btn btn-primary" data-auto-loading="true">Guardar</button>
+  </form>
+{% endblock %}

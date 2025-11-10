@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Mi perfil</h2>
+  <form method="post" class="form">
+    <label for="full_name">Nombre completo</label>
+    <input id="full_name" type="text" name="full_name" value="{{ profile.full_name if profile else '' }}" />
+
+    <label for="email">Email</label>
+    <input id="email" type="email" name="email" value="{{ profile.email if profile else '' }}" />
+
+    <label for="phone">Teléfono</label>
+    <input id="phone" type="text" name="phone" value="{{ profile.phone if profile else '' }}" />
+
+    <button type="submit" class="btn btn-primary" data-auto-loading="true">Guardar</button>
+  </form>
+{% endblock %}

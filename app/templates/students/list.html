@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Estudiantes - Sistema Escolar{% endblock %}
+{% block content %}
+  <!-- Header Section -->
+  <div class="mb-8 animate-slide-up">
+    <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between">
+      <div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Estudiantes</h1>
+        <p class="text-gray-600">Gestiona todos los estudiantes del sistema</p>
+      </div>
+      {% if current_user.role == 'admin' %}
+      <div class="mt-4 sm:mt-0">
+        <a href="{{ url_for('students.create_student') }}" class="btn-modern btn-primary">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+          </svg>
+          Nuevo Estudiante
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Search Section -->
+  <div class="card p-6 mb-6 animate-slide-up" style="animation-delay: 0.1s">
+    <form method="get" class="flex flex-col sm:flex-row gap-4">
+      <div class="flex-1">
+        <input type="text" name="q" value="{{ q }}" placeholder="Buscar por nombre o email..." 
+               class="form-input w-full" />
+      </div>
+      <button type="submit" class="btn-modern btn-outline" data-auto-loading="true">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+        </svg>
+        Buscar
+      </button>
+    </form>
+  </div>
+
+  <!-- Students Table -->
+  <div class="card animate-slide-up" style="animation-delay: 0.2s">
+    <div class="overflow-x-auto">
+      <table class="table-modern">
+        <thead>
+          <tr>
+            <th class="w-12">#</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for s in students %}
+          <tr class="animate-scale-in" style="animation-delay: {{ loop.index0 * 0.05 }}s">
+            <td class="font-medium text-gray-900">{{ loop.index }}</td>
+            <td>
+              <div class="flex items-center">
+                <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-blue-700 rounded-full flex items-center justify-center text-white text-sm font-medium mr-3">
+                  {{ s.name[0]|upper }}
+                </div>
+                <div>
+                  <div class="font-medium text-gray-900">{{ s.name }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="text-gray-600">{{ s.email }}</div>
+            </td>
+            <td class="text-right">
+              <div class="flex items-center justify-end gap-2">
+                <a href="{{ url_for('students.edit_student', student_id=s.id) }}" class="btn-modern btn-secondary btn-sm">
+                  <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"/>
+                  </svg>
+                  Editar
+                </a>
+                {% if current_user.role == 'admin' %}
+                <form method="post" action="{{ url_for('students.delete_student', student_id=s.id) }}" class="inline">
+                  <button type="submit" class="btn-modern btn-outline btn-sm" onclick="return confirm('¿Estás seguro de eliminar este estudiante?');">
+                    <svg class="w-3 h-3 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/>
+                    </svg>
+                    Eliminar
+                  </button>
+                </form>
+                {% endif %}
+              </div>
+            </td>
+          </tr>
+          {% else %}
+          <tr>
+            <td colspan="4" class="text-center py-8 text-gray-500">
+              <svg class="w-12 h-12 mx-auto mb-4 text-gray-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+              </svg>
+              <p class="text-lg font-medium">No hay estudiantes registrados</p>
+              <p class="text-sm">Comienza agregando el primer estudiante</p>
+              {% if current_user.role == 'admin' %}
+              <a href="{{ url_for('students.create_student') }}" class="btn-modern btn-primary mt-4">
+                Agregar Estudiante
+              </a>
+              {% endif %}
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

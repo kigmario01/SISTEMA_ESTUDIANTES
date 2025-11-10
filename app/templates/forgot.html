@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Recuperar contraseña</h2>
+  <form method="post" class="form">
+    <label for="username">Usuario</label>
+    <input id="username" type="text" name="username" required />
+    <button type="submit" class="btn btn-primary" data-auto-loading="true">Enviar enlace</button>
+  </form>
+  <p>Volver a <a href="{{ url_for('auth.login') }}">iniciar sesión</a>.</p>
+{% endblock %}

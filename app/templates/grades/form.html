@@ -1,0 +1,30 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>{{ 'Registrar' if action == 'create' else 'Editar' }} calificación</h2>
+  <form method="post">
+    <label>Estudiante</label>
+    <select name="student_id" required>
+      {% for s in students %}
+        {% set selected = (enrollment and enrollment.student_id == s.id) %}
+        <option value="{{ s.id }}" {% if selected %}selected{% endif %}>{{ s.name }}</option>
+      {% endfor %}
+    </select>
+    <label>Curso</label>
+    <select name="course_id" required>
+      {% for c in courses %}
+        {% set selected = (enrollment and enrollment.course_id == c.id) %}
+        <option value="{{ c.id }}" {% if selected %}selected{% endif %}>{{ c.name }}</option>
+      {% endfor %}
+    </select>
+    <label>Profesor</label>
+    <select name="teacher_id" required>
+      {% for t in teachers %}
+        {% set selected = (enrollment and enrollment.teacher_id == t.id) %}
+        <option value="{{ t.id }}" {% if selected %}selected{% endif %}>{{ t.name }}</option>
+      {% endfor %}
+    </select>
+    <label>Nota</label>
+    <input type="number" name="grade" step="0.01" value="{{ enrollment.grade if enrollment else '' }}" />
+    <button type="submit" class="btn btn-primary" data-auto-loading="true">Guardar</button>
+  </form>
+{% endblock %}

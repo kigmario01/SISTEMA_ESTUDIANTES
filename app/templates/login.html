@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% block title %}Iniciar Sesión - Sistema Escolar{% endblock %}
+{% block content %}
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-8">
+      <!-- Logo and Title -->
+      <div class="text-center animate-slide-up">
+        <div class="mx-auto h-12 w-12 bg-gradient-to-r from-blue-500 to-blue-700 rounded-xl flex items-center justify-center mb-4">
+          <svg class="h-8 w-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C19.832 18.477 18.246 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"/>
+          </svg>
+        </div>
+        <h2 class="text-3xl font-bold text-gray-900 mb-2">Sistema Escolar</h2>
+        <p class="text-gray-600">Inicia sesión en tu cuenta</p>
+      </div>
+
+      <!-- Login Card -->
+      <div class="card p-8 animate-scale-in">
+        <form method="post" class="space-y-6">
+          <div class="form-group">
+            <label for="username" class="form-label">Usuario</label>
+            <input id="username" type="text" name="username" required class="form-input" placeholder="Ingresa tu usuario" />
+          </div>
+          
+          <div class="form-group">
+            <label for="password" class="form-label">Contraseña</label>
+            <input id="password" type="password" name="password" required class="form-input" placeholder="Ingresa tu contraseña" />
+          </div>
+          
+          <div class="flex items-center justify-between">
+            <label class="flex items-center">
+              <input type="checkbox" class="form-checkbox" name="remember">
+              <span class="ml-2 text-sm text-gray-600">Recordarme</span>
+            </label>
+            <a href="{{ url_for('auth.forgot') }}" class="text-sm text-blue-600 hover:text-blue-500 transition-colors">
+              ¿Olvidaste tu contraseña?
+            </a>
+          </div>
+          
+          <button type="submit" class="btn-modern btn-primary w-full" data-auto-loading="true">
+            Iniciar Sesión
+          </button>
+        </form>
+
+        <!-- Divider -->
+        <div class="mt-6 relative">
+          <div class="absolute inset-0 flex items-center">
+            <div class="w-full border-t border-gray-300"></div>
+          </div>
+          <div class="relative flex justify-center text-sm">
+            <span class="px-2 bg-white text-gray-500">¿No tienes cuenta?</span>
+          </div>
+        </div>
+
+        <div class="mt-6 text-center">
+          <a href="{{ url_for('auth.register') }}" class="btn-modern btn-outline w-full">
+            Crear cuenta nueva
+          </a>
+        </div>
+      </div>
+
+      <!-- Demo Credentials -->
+      <div class="text-center animate-slide-up" style="animation-delay: 0.3s">
+        <p class="text-sm text-gray-600 mb-2">Credenciales de demostración:</p>
+        <div class="bg-gray-50 rounded-lg p-3 text-xs text-gray-700">
+          <p><strong>Admin:</strong> admin / admin123</p>
+          <p><strong>Docente:</strong> docente / docente123</p>
+          <p><strong>Estudiante:</strong> estudiante / estudiante123</p>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endblock %}

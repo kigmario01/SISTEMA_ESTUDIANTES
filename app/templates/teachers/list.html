@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Profesores</h2>
+  <form method="get" class="filters">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por nombre" />
+    <button type="submit" class="btn btn-outline" data-auto-loading="true">Buscar</button>
+  </form>
+  {% if current_user.role == 'admin' %}
+    <p><a href="{{ url_for('teachers.create_teacher') }}" class="btn btn-primary">Nuevo profesor</a></p>
+  {% endif %}
+  <table>
+    <thead>
+      <tr><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {% for t in teachers %}
+        <tr>
+          <td>{{ t.name }}</td>
+          <td>{{ t.email }}</td>
+          <td>
+            {% if current_user.role == 'admin' %}
+              <a href="{{ url_for('teachers.edit_teacher', teacher_id=t.id) }}">Editar</a>
+              <form method="post" action="{{ url_for('teachers.delete_teacher', teacher_id=t.id) }}" style="display:inline">
+                <button type="submit" class="btn btn-outline" onclick="return confirm('¿Eliminar?');">Eliminar</button>
+              </form>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}

@@ -1,0 +1,32 @@
+{% extends "base.html" %}
+{% block content %}
+  <h2>Cursos</h2>
+  <form method="get" class="filters">
+    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por nombre" />
+    <button type="submit" class="btn btn-outline" data-auto-loading="true">Buscar</button>
+  </form>
+  {% if current_user.role == 'admin' %}
+    <p><a href="{{ url_for('courses.create_course') }}" class="btn btn-primary">Nuevo curso</a></p>
+  {% endif %}
+  <table>
+    <thead>
+      <tr><th>Nombre</th><th>Descripción</th><th>Acciones</th></tr>
+    </thead>
+    <tbody>
+      {% for c in courses %}
+        <tr>
+          <td>{{ c.name }}</td>
+          <td>{{ c.description }}</td>
+          <td>
+            {% if current_user.role == 'admin' %}
+              <a href="{{ url_for('courses.edit_course', course_id=c.id) }}">Editar</a>
+              <form method="post" action="{{ url_for('courses.delete_course', course_id=c.id) }}" style="display:inline">
+                <button type="submit" class="btn btn-outline" onclick="return confirm('¿Eliminar?');">Eliminar</button>
+              </form>
+            {% else %}—{% endif %}
+          </td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+{% endblock %}
