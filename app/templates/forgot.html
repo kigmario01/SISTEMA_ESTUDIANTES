@@ -1,10 +1,24 @@
 {% extends "base.html" %}
+{% block title %}Recuperar contraseña - Sistema Escolar{% endblock %}
 {% block content %}
-  <h2>Recuperar contraseña</h2>
-  <form method="post" class="form">
-    <label for="username">Usuario</label>
-    <input id="username" type="text" name="username" required />
-    <button type="submit" class="btn btn-primary" data-auto-loading="true">Enviar enlace</button>
-  </form>
-  <p>Volver a <a href="{{ url_for('auth.login') }}">iniciar sesión</a>.</p>
+  <div class="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+    <div class="max-w-md w-full space-y-6 animate-slide-up">
+      <div class="text-center">
+        <h1 class="text-3xl font-bold text-gray-900 mb-2">Recuperar contraseña</h1>
+        <p class="text-gray-600">Ingresa tu usuario y te enviaremos un enlace temporal.</p>
+      </div>
+      <div class="card p-8">
+        <form method="post" class="space-y-5">
+          <div class="form-group">
+            <label for="username" class="form-label">Usuario</label>
+            <input id="username" type="text" name="username" class="form-input" required />
+          </div>
+          <button type="submit" class="btn-modern btn-primary w-full" data-auto-loading="true">Enviar enlace</button>
+        </form>
+        <p class="text-center text-sm text-gray-600 mt-4">
+          Volver a <a href="{{ url_for('auth.login') }}" class="text-blue-600">iniciar sesión</a>.
+        </p>
+      </div>
+    </div>
+  </div>
 {% endblock %}

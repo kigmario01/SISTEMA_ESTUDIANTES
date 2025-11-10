@@ -1,26 +1,181 @@
 {% extends "base.html" %}
+{% block title %}Reportes - Sistema Escolar{% endblock %}
 {% block content %}
-  <h2>Reportes</h2>
-  <form method="get" class="filters">
-    <label>Profesor</label>
-    <select name="teacher_id">
-      <option value="">Todos</option>
-      {% for t in teachers %}
-        <option value="{{ t.id }}" {% if selected_teacher_id and selected_teacher_id|int == t.id %}selected{% endif %}>{{ t.name }}</option>
-      {% endfor %}
-    </select>
-    <button type="submit" class="btn btn-outline" data-auto-loading="true">Filtrar</button>
-  </form>
+  <div class="page-header animate-slide-up">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Reportes inteligentes</h1>
+      <p class="text-gray-600">
+        Visualiza métricas clave y descarga un informe completo de calificaciones.
+      </p>
+    </div>
+    <div class="flex flex-wrap gap-3">
+      <a href="{{ url_for('reports.export_report', teacher_id=selected_teacher_id) }}" class="btn-modern btn-primary" data-auto-loading="true">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v12m0 0l-3.5-3.5M12 16l3.5-3.5M5 20h14" />
+        </svg>
+        Descargar PDF
+      </a>
+    </div>
+  </div>
 
-  <h3>Promedio por curso</h3>
-  <table>
-    <thead>
-      <tr><th>Curso</th><th>Promedio</th></tr>
-    </thead>
-    <tbody>
-      {% for row in summarized %}
-        <tr><td>{{ row.course }}</td><td>{{ row.avg if row.avg is not none else '—' }}</td></tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="card p-6 mb-6 animate-slide-up" style="animation-delay: 0.1s">
+    <form method="get" class="form-grid">
+      <div class="form-group">
+        <label for="teacher_id" class="form-label">Docente</label>
+        <select id="teacher_id" name="teacher_id" class="form-input">
+          <option value="">Todos los docentes</option>
+          {% for t in teachers %}
+            <option value="{{ t.id }}" {% if selected_teacher_id and selected_teacher_id|int == t.id %}selected{% endif %}>{{ t.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+      <div class="flex items-end gap-3">
+        <button type="submit" class="btn-modern btn-outline" data-auto-loading="true">
+          <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+          </svg>
+          Aplicar filtros
+        </button>
+        <a href="{{ url_for('reports.reports_home') }}" class="btn-modern btn-ghost">
+          Limpiar
+        </a>
+      </div>
+    </form>
+  </div>
+
+  <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-4 mb-8 animate-slide-up" style="animation-delay: 0.2s">
+    <div class="metric-card">
+      <div class="metric-icon gradient-blue">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h4l1 2h6l1-2h4a1 1 0 011 1v16a1 1 0 01-1 1H4a1 1 0 01-1-1V4z" />
+        </svg>
+      </div>
+      <div class="metric-content">
+        <p class="metric-label">Promedio general</p>
+        <p class="metric-value">{{ report.overall_average if report.overall_average is not none else 'Sin datos' }}</p>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gradient-emerald">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6m6 0V9a2 2 0 012-2h2a2 2 0 012 2v8m0 0V7a2 2 0 012-2h2a2 2 0 012 2v10" />
+        </svg>
+      </div>
+      <div class="metric-content">
+        <p class="metric-label">Registros analizados</p>
+        <p class="metric-value">{{ report.total_records }}</p>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gradient-orange">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m0 0l4-4m-4 4l4 4" />
+        </svg>
+      </div>
+      <div class="metric-content">
+        <p class="metric-label">Docente seleccionado</p>
+        <p class="metric-value">{{ report.teacher.name if report.teacher else 'Todos' }}</p>
+      </div>
+    </div>
+    <div class="metric-card">
+      <div class="metric-icon gradient-purple">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3-.895 3-2-1.343-2-3-2zm0 10c-2.21 0-4-1.119-4-2.5S9.79 13 12 13s4 1.119 4 2.5S14.21 18 12 18zm0-14a3 3 0 110 6 3 3 0 010-6z" />
+        </svg>
+      </div>
+      <div class="metric-content">
+        <p class="metric-label">Última actualización</p>
+        <p class="metric-value">{{ report.generated_at.strftime('%d/%m/%Y %H:%M') }}</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="grid gap-6 xl:grid-cols-2">
+    <div class="card p-6 animate-slide-up" style="animation-delay: 0.25s">
+      <div class="card-header">
+        <div>
+          <h2 class="card-title">Promedio por curso</h2>
+          <p class="card-subtitle">Resumen de desempeño por cada curso impartido</p>
+        </div>
+      </div>
+      <div class="table-wrapper">
+        <table class="table-modern">
+          <thead>
+            <tr>
+              <th>Curso</th>
+              <th>Registros</th>
+              <th>Promedio</th>
+              <th>Mínimo</th>
+              <th>Máximo</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for row in report.course_stats %}
+              <tr class="animate-scale-in" style="animation-delay: {{ loop.index0 * 0.05 }}s">
+                <td class="font-medium text-gray-900">{{ row.course_name }}</td>
+                <td>{{ row.count }}</td>
+                <td>{{ row.average if row.average is not none else '—' }}</td>
+                <td>{{ row.min if row.min is not none else '—' }}</td>
+                <td>{{ row.max if row.max is not none else '—' }}</td>
+              </tr>
+            {% else %}
+              <tr>
+                <td colspan="5" class="text-center py-6 text-gray-500">
+                  No hay información disponible para los filtros seleccionados.
+                </td>
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="grid gap-6">
+      <div class="card p-6 animate-slide-up" style="animation-delay: 0.3s">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Distribución de notas</h2>
+            <p class="card-subtitle">Cantidad de calificaciones dentro de cada rango</p>
+          </div>
+        </div>
+        <div class="space-y-4">
+          {% for bucket in report.grade_distribution %}
+            <div>
+              <div class="flex justify-between text-sm text-gray-600 mb-1">
+                <span>{{ bucket.label }}</span>
+                <span>{{ bucket.count }} registros</span>
+              </div>
+              <div class="progress-bar-track">
+                {% set total = report.grade_distribution | sum(attribute='count') %}
+                {% set percent = (bucket.count / total * 100) if total > 0 else 0 %}
+                <div class="progress-bar-fill" style="width: {{ percent }}%"></div>
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <div class="card p-6 animate-slide-up" style="animation-delay: 0.35s">
+        <div class="card-header">
+          <div>
+            <h2 class="card-title">Estudiantes destacados</h2>
+            <p class="card-subtitle">Los mejores promedios registrados recientemente</p>
+          </div>
+        </div>
+        <ul class="space-y-4">
+          {% for student in report.top_students %}
+            <li class="flex items-center justify-between">
+              <div>
+                <p class="font-medium text-gray-900">{{ student.student_name }}</p>
+                <p class="text-sm text-gray-500">{{ student.courses }} cursos evaluados</p>
+              </div>
+              <span class="badge badge-success">{{ student.average if student.average is not none else '—' }}</span>
+            </li>
+          {% else %}
+            <li class="text-sm text-gray-500">No hay calificaciones registradas.</li>
+          {% endfor %}
+        </ul>
+      </div>
+    </div>
+  </div>
 {% endblock %}

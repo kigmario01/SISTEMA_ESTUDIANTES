@@ -26,16 +26,26 @@ def create_student():
         flash("Acceso restringido a administradores", "error")
         return redirect(url_for("students.list_students"))
     if request.method == "POST":
-        name = request.form.get("name")
-        email = request.form.get("email")
+        name = (request.form.get("name") or "").strip()
+        email = (request.form.get("email") or "").strip().lower()
+
         if not name or not email:
-            flash("Nombre y email son obligatorios", "error")
-        else:
-            s = Student(name=name, email=email)
-            db.session.add(s)
-            db.session.commit()
-            return redirect(url_for("students.list_students"))
-    return render_template("students/form.html", action="create")
+            flash("Nombre y correo son obligatorios", "error")
+            student = Student(name=name, email=email)
+            return render_template("students/form.html", action="create", student=student)
+
+        if Student.query.filter_by(email=email).first():
+            flash("Ya existe un estudiante con ese correo", "error")
+            student = Student(name=name, email=email)
+            return render_template("students/form.html", action="create", student=student)
+
+        s = Student(name=name, email=email)
+        db.session.add(s)
+        db.session.commit()
+        flash("Estudiante creado correctamente", "success")
+        return redirect(url_for("students.list_students"))
+
+    return render_template("students/form.html", action="create", student=None)
 
 
 @students_bp.route("/<int:student_id>/edit", methods=["GET", "POST"])
@@ -46,9 +56,22 @@ def edit_student(student_id):
         return redirect(url_for("students.list_students"))
     s = Student.query.get_or_404(student_id)
     if request.method == "POST":
-        s.name = request.form.get("name")
-        s.email = request.form.get("email")
+        name = (request.form.get("name") or "").strip()
+        email = (request.form.get("email") or "").strip().lower()
+
+        if not name or not email:
+            flash("Nombre y correo son obligatorios", "error")
+            return render_template("students/form.html", action="edit", student=s)
+
+        existing = Student.query.filter(Student.email == email, Student.id != s.id).first()
+        if existing:
+            flash("Ya existe otro estudiante con ese correo", "error")
+            return render_template("students/form.html", action="edit", student=s)
+
+        s.name = name
+        s.email = email
         db.session.commit()
+        flash("Estudiante actualizado", "success")
         return redirect(url_for("students.list_students"))
     return render_template("students/form.html", action="edit", student=s)
 
@@ -62,4 +85,5 @@ def delete_student(student_id):
     s = Student.query.get_or_404(student_id)
     db.session.delete(s)
     db.session.commit()
+    flash("Estudiante eliminado", "success")
     return redirect(url_for("students.list_students"))

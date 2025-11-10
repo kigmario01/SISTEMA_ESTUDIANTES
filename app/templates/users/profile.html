@@ -1,16 +1,28 @@
 {% extends "base.html" %}
+{% block title %}Mi perfil - Sistema Escolar{% endblock %}
 {% block content %}
-  <h2>Mi perfil</h2>
-  <form method="post" class="form">
-    <label for="full_name">Nombre completo</label>
-    <input id="full_name" type="text" name="full_name" value="{{ profile.full_name if profile else '' }}" />
-
-    <label for="email">Email</label>
-    <input id="email" type="email" name="email" value="{{ profile.email if profile else '' }}" />
-
-    <label for="phone">Teléfono</label>
-    <input id="phone" type="text" name="phone" value="{{ profile.phone if profile else '' }}" />
-
-    <button type="submit" class="btn btn-primary" data-auto-loading="true">Guardar</button>
-  </form>
+  <div class="max-w-2xl mx-auto animate-slide-up">
+    <div class="card p-6">
+      <h1 class="text-2xl font-semibold text-gray-900 mb-4">Mi perfil</h1>
+      <p class="text-gray-600 mb-6">Actualiza tus datos de contacto y asegúrate de mantener la información al día.</p>
+      <form method="post" class="space-y-5">
+        <div class="form-group">
+          <label for="full_name" class="form-label">Nombre completo</label>
+          <input id="full_name" type="text" name="full_name" value="{{ profile.full_name if profile else '' }}" class="form-input" placeholder="Nombre y apellidos" />
+        </div>
+        <div class="form-group">
+          <label for="email" class="form-label">Correo electrónico</label>
+          <input id="email" type="email" name="email" value="{{ profile.email if profile else '' }}" class="form-input" placeholder="correo@ejemplo.com" />
+        </div>
+        <div class="form-group">
+          <label for="phone" class="form-label">Teléfono</label>
+          <input id="phone" type="text" name="phone" value="{{ profile.phone if profile else '' }}" class="form-input" placeholder="(+xx) xxxx-xxxx" />
+        </div>
+        <div class="flex justify-end gap-3">
+          <a href="{{ url_for('index') }}" class="btn-modern btn-outline">Cancelar</a>
+          <button type="submit" class="btn-modern btn-primary" data-auto-loading="true">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}

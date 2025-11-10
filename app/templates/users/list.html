@@ -1,27 +1,60 @@
 {% extends "base.html" %}
+{% block title %}Usuarios - Sistema Escolar{% endblock %}
 {% block content %}
-  <h2>Gestión de usuarios</h2>
-  <form method="get" class="filters">
-    <input type="text" name="q" value="{{ q }}" placeholder="Buscar por usuario" />
-    <button type="submit" class="btn btn-outline" data-auto-loading="true">Buscar</button>
-  </form>
-  <table>
-    <thead>
-      <tr><th>Usuario</th><th>Rol</th><th>Nombre</th><th>Email</th><th>Acciones</th></tr>
-    </thead>
-    <tbody>
-      {% for u in users %}
-        {% set p = profiles.get(u.id) %}
-        <tr>
-          <td>{{ u.username }}</td>
-          <td>{{ u.role }}</td>
-          <td>{{ p.full_name if p else '—' }}</td>
-          <td>{{ p.email if p else '—' }}</td>
-          <td>
-            <a href="{{ url_for('users.edit_role', user_id=u.id) }}">Cambiar rol</a>
-          </td>
-        </tr>
-      {% endfor %}
-    </tbody>
-  </table>
+  <div class="page-header animate-slide-up">
+    <div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-2">Gestión de usuarios</h1>
+      <p class="text-gray-600">Administra los roles y la información de cada cuenta.</p>
+    </div>
+  </div>
+
+  <div class="card p-6 mb-6 animate-slide-up" style="animation-delay: 0.1s">
+    <form method="get" class="flex flex-col sm:flex-row gap-4">
+      <div class="flex-1">
+        <input type="text" name="q" value="{{ q }}" placeholder="Buscar por nombre de usuario" class="form-input w-full" />
+      </div>
+      <button type="submit" class="btn-modern btn-outline" data-auto-loading="true">
+        <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+        </svg>
+        Buscar
+      </button>
+    </form>
+  </div>
+
+  <div class="card animate-slide-up" style="animation-delay: 0.2s">
+    <div class="overflow-x-auto">
+      <table class="table-modern">
+        <thead>
+          <tr>
+            <th>Usuario</th>
+            <th>Rol</th>
+            <th>Nombre</th>
+            <th>Email</th>
+            <th class="text-right">Acciones</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for u in users %}
+            {% set p = profiles.get(u.id) %}
+            <tr class="animate-scale-in" style="animation-delay: {{ loop.index0 * 0.05 }}s">
+              <td class="font-medium text-gray-900">{{ u.username }}</td>
+              <td>
+                <span class="badge badge-neutral">{{ u.role }}</span>
+              </td>
+              <td>{{ p.full_name if p else '—' }}</td>
+              <td>{{ p.email if p else '—' }}</td>
+              <td class="text-right">
+                <a href="{{ url_for('users.edit_role', user_id=u.id) }}" class="btn-modern btn-secondary btn-sm">Cambiar rol</a>
+              </td>
+            </tr>
+          {% else %}
+            <tr>
+              <td colspan="5" class="text-center py-8 text-gray-500">No se encontraron usuarios con los filtros aplicados.</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
 {% endblock %}

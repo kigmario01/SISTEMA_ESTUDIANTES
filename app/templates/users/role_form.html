@@ -1,13 +1,23 @@
 {% extends "base.html" %}
+{% block title %}Cambiar rol - Sistema Escolar{% endblock %}
 {% block content %}
-  <h2>Cambiar rol de {{ user.username }}</h2>
-  <form method="post" class="form">
-    <label for="role">Rol</label>
-    <select id="role" name="role" required>
-      <option value="estudiante" {% if user.role == 'estudiante' %}selected{% endif %}>Estudiante</option>
-      <option value="docente" {% if user.role == 'docente' %}selected{% endif %}>Docente</option>
-      <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Admin</option>
-    </select>
-    <button type="submit" class="btn btn-primary" data-auto-loading="true">Guardar</button>
-  </form>
+  <div class="max-w-xl mx-auto animate-slide-up">
+    <div class="card p-6">
+      <h1 class="text-2xl font-semibold text-gray-900 mb-4">Cambiar rol de {{ user.username }}</h1>
+      <form method="post" class="space-y-5">
+        <div class="form-group">
+          <label for="role" class="form-label">Rol asignado</label>
+          <select id="role" name="role" required class="form-input">
+            <option value="estudiante" {% if user.role == 'estudiante' %}selected{% endif %}>Estudiante</option>
+            <option value="docente" {% if user.role == 'docente' %}selected{% endif %}>Docente</option>
+            <option value="admin" {% if user.role == 'admin' %}selected{% endif %}>Administrador</option>
+          </select>
+        </div>
+        <div class="flex justify-end gap-3">
+          <a href="{{ url_for('users.manage_users') }}" class="btn-modern btn-outline">Cancelar</a>
+          <button type="submit" class="btn-modern btn-primary" data-auto-loading="true">Guardar cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
 {% endblock %}
